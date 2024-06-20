@@ -8,7 +8,7 @@ import '../model/reuqest/register_model.dart';
 class ApiService {
   Future<RegisterResponseModel> register(RegisterModel registerModel) async {
     final response = await http.post(
-      Uri.parse('http://192.168.1.9:8000/api/register'),
+      Uri.parse('http://192.168.129.1:8000/api/register'),
       headers: {'Content-Type': 'application/json'},
       body: registerModel.toMap(),
     );
@@ -23,7 +23,7 @@ class ApiService {
 
   Future<LoginResponseModel> login(LoginModel loginModel) async {
     final response = await http.post(
-      Uri.parse('http://192.168.1.9:8000/api/login'),
+      Uri.parse('http://192.168.129.1:8000/api/login'),
       body: loginModel.toMap(),
     );
 

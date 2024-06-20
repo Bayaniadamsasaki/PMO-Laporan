@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laporan_masyarakat/data/laporan%20sources/kebakaran/kebakaran_datasources.dart';
 import 'package:laporan_masyarakat/model/response/laporan/kebakaran_response_model.dart';
 
-
 part 'kebakaran_event.dart';
 part 'kebakaran_state.dart';
 
@@ -16,7 +15,10 @@ class KebakaranBloc extends Bloc<KebakaranEvent, KebakaranState> {
       emit(KebakaranLoading());
       final result = await kebakaranDataSources.createKebakaran(event.request);
       print(result);
-      emit(KebakaranLoaded(model: result));
+      result.fold(
+        (l) => emit(KebakaranError(message: l)),
+        (r) => emit(KebakaranLoaded(model: r)),
+      );
     });
   }
 }

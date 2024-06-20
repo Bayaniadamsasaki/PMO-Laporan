@@ -9,4 +9,3 @@ final class SaveKebakaranEvent extends KebakaranEvent {
     required this.request,
   });
 }
-
