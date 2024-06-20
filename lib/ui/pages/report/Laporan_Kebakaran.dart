@@ -2,19 +2,53 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:laporan_masyarakat/bloc/kebakaran/kebakaran_bloc.dart';
 import 'package:laporan_masyarakat/config/Asset.dart';
-import 'package:laporan_masyarakat/core.dart';
+import 'package:laporan_masyarakat/model/response/laporan/kebakaran_response_model.dart';
 import 'package:laporan_masyarakat/ui/widget/form_info.dart';
 
 class LaporanKebakaran extends StatefulWidget {
-  const LaporanKebakaran({super.key});
+  const LaporanKebakaran({Key? key}) : super(key: key);
 
   @override
   State<LaporanKebakaran> createState() => _LaporanKebakaranState();
 }
 
 class _LaporanKebakaranState extends State<LaporanKebakaran> {
+  late TextEditingController foto;
+  late TextEditingController jenis;
+  late TextEditingController nama;
+  late TextEditingController telepon;
+  late TextEditingController lokasi;
+  late TextEditingController tanggal;
+  late TextEditingController isi;
+
+  @override
+  void initState() {
+    super.initState();
+    foto = TextEditingController();
+    jenis = TextEditingController();
+    nama = TextEditingController();
+    telepon = TextEditingController();
+    lokasi = TextEditingController();
+    tanggal = TextEditingController();
+    isi = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    foto.dispose();
+    jenis.dispose();
+    nama.dispose();
+    telepon.dispose();
+    lokasi.dispose();
+    tanggal.dispose();
+    isi.dispose();
+    super.dispose();
+  }
+
   DateTime? _selectedDate;
   File? _imageFile;
 
@@ -28,13 +62,16 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
+
+        tanggal.text = '${picked.day}/${picked.month}/${picked.year}';
       });
     }
   }
 
   Future<void> _pickImage() async {
     try {
-      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _imageFile = File(pickedFile.path);
@@ -110,7 +147,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                             child: _imageFile == null
                                 ? Center(
                                     child: Text(
-                                      'Tap to select an image',
+                                      'Tap untuk memilih gambar',
                                       style: Asset.poppins.copyWith(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -128,7 +165,6 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      // Lanjutkan dengan field-field lain yang ada pada kode Anda
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -147,7 +183,6 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(
-                          initialValue: 'Kebakaran',
                           decoration: const InputDecoration(
                             labelStyle: TextStyle(
                               color: Colors.blueGrey,
@@ -159,7 +194,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                               ),
                             ),
                           ),
-                          onChanged: (value) {},
+                          controller: jenis,
                         ),
                       ),
                       const SizedBox(
@@ -183,7 +218,6 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(
-                          initialValue: 'Adam',
                           decoration: const InputDecoration(
                             labelStyle: TextStyle(
                               color: Colors.blueGrey,
@@ -195,7 +229,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                               ),
                             ),
                           ),
-                          onChanged: (value) {},
+                          controller: nama,
                         ),
                       ),
                       const SizedBox(
@@ -219,7 +253,6 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(
-                          initialValue: '085xxxxxx',
                           decoration: const InputDecoration(
                             labelStyle: TextStyle(
                               color: Colors.blueGrey,
@@ -231,7 +264,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                               ),
                             ),
                           ),
-                          onChanged: (value) {},
+                          controller: telepon,
                         ),
                       ),
                       const SizedBox(
@@ -255,7 +288,6 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(
-                          initialValue: 'Watumas, Jawa Tengah',
                           decoration: InputDecoration(
                             labelStyle: Asset.poppins.copyWith(
                                 color: Colors.blueGrey,
@@ -268,7 +300,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                               ),
                             ),
                           ),
-                          onChanged: (value) {},
+                          controller: lokasi,
                         ),
                       ),
                       const SizedBox(
@@ -308,12 +340,12 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                               ),
                             ),
                           ),
+                          controller: tanggal,
                         ),
                       ),
                       const SizedBox(
                         height: 20.0,
                       ),
-                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -342,9 +374,8 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                             alignLabelWithHint: true,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Asset.colorPrimary,
-                              ),
+                              borderSide:
+                                  const BorderSide(color: Asset.colorPrimary),
                             ),
                             labelText: 'Isi kejadian',
                             hintStyle: Asset.poppins.copyWith(
@@ -352,31 +383,63 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
+                          controller: isi,
                         ),
                       ),
                       const SizedBox(
                         height: 20.0,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          height: 72,
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.all(9.0),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Asset.colorPrimary,
+                      BlocConsumer<KebakaranBloc, KebakaranState>(
+                        listener: (context, state) {
+                          if (state is KebakaranLoaded) {
+                            foto.clear();
+                            jenis.clear();
+                            nama.clear();
+                            telepon.clear();
+                            lokasi.clear();
+                            tanggal.clear();
+                            isi.clear();
+                            //navigasi
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Laporan Sukses"),
+                              ),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          return Container(
+                            height: 72,
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.all(9.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Asset.colorPrimary,
+                              ),
+                              onPressed: () {
+                                final requestModel = KebakaranResponseModel(
+                                  foto: _imageFile!.path,
+                                  jenis: jenis.text,
+                                  nama: nama.text,
+                                  telepon: telepon.text,
+                                  lokasi: lokasi.text,
+                                  tanggal: _selectedDate,
+                                  isi: isi.text,
+                                );
+                                context.read<KebakaranBloc>().add(
+                                      SaveKebakaranEvent(request: requestModel),
+                                    );
+                              },
+                              child: Text(
+                                "Daftar",
+                                style: Asset.poppins.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600),
+                              ),
                             ),
-                            onPressed: () {},
-                            child: Text(
-                              "Kirim Laporan",
-                              style: Asset.poppins.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ),
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 10.0,

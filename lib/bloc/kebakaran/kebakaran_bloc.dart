@@ -2,7 +2,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laporan_masyarakat/data/laporan%20sources/kebakaran/kebakaran_datasources.dart';
 import 'package:laporan_masyarakat/model/response/laporan/kebakaran_response_model.dart';
-import 'package:laporan_masyarakat/model/reuqest/laporan/kebakaran_model.dart';
+
 
 part 'kebakaran_event.dart';
 part 'kebakaran_state.dart';

@@ -7,41 +7,35 @@ import 'package:laporan_masyarakat/localstorage/auth_local_storage.dart';
 import 'package:laporan_masyarakat/model/reuqest/login_model.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+  const SignIn({Key? key}) : super(key: key);
 
   @override
   State<SignIn> createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
-  TextEditingController? emailControler;
-  TextEditingController? passwordControler;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
-    emailControler = TextEditingController();
-    passwordControler = TextEditingController();
-
-    isLogin();
     super.initState();
+    isLogin();
   }
 
   void isLogin() async {
     final isTokenExist = await AuthLocalStorage().isTokenExist();
-    if (isTokenExist) {
-      if (mounted) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
-          return const HomePage();
-        }));
-      }
+    if (isTokenExist && mounted) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return const HomePage();
+      }));
     }
   }
 
   @override
   void dispose() {
-    emailControler!.dispose();
-    passwordControler!.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -87,7 +81,7 @@ class _SignInState extends State<SignIn> {
                             horizontal: 20, vertical: 19),
                       ),
                       keyboardType: TextInputType.emailAddress,
-                      controller: emailControler,
+                      controller: emailController,
                     ),
                     const SizedBox(
                       height: 22.0,
@@ -103,7 +97,7 @@ class _SignInState extends State<SignIn> {
                             horizontal: 20, vertical: 19),
                       ),
                       keyboardType: TextInputType.emailAddress,
-                      controller: passwordControler,
+                      controller: passwordController,
                       obscureText: true,
                     ),
                     const SizedBox(
@@ -127,8 +121,8 @@ class _SignInState extends State<SignIn> {
                     BlocConsumer<LoginBloc, LoginState>(
                       listener: (context, state) {
                         if (state is LoginLoaded) {
-                          emailControler!.clear();
-                          passwordControler!.clear();
+                          emailController.clear();
+                          passwordController.clear();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               backgroundColor: Colors.blue,
@@ -144,23 +138,13 @@ class _SignInState extends State<SignIn> {
                               },
                             ),
                           );
-                        } else if (state is LoginError) {
-                          // Cek apakah respons telah berhasil diperoleh
-                          if (state.message != 'Network problem') {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                backgroundColor: Colors.blue,
-                                content: Text('Success Login'),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                backgroundColor: Colors.red,
-                                content: Text('Failed Login'),
-                              ),
-                            );
-                          }
+                        } else if (state is LoginError && state.message.isNotEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(state.message),
+                            ),
+                          );
                         }
                       },
                       builder: (context, state) {
@@ -173,13 +157,25 @@ class _SignInState extends State<SignIn> {
                               backgroundColor: Asset.colorPrimary,
                             ),
                             onPressed: () {
-                              final requestModel = LoginModel(
-                                email: emailControler!.text,
-                                password: passwordControler!.text,
-                              );
-                              context
-                                  .read<LoginBloc>()
-                                  .add(DoLoginEvent(loginModel: requestModel));
+                              final email = emailController.text;
+                              final password = passwordController.text;
+
+                              if (email.isNotEmpty && password.isNotEmpty) {
+                                final requestModel = LoginModel(
+                                  email: email,
+                                  password: password,
+                                );
+                                context
+                                    .read<LoginBloc>()
+                                    .add(DoLoginEvent(loginModel: requestModel));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text('Email and password cannot be empty'),
+                                  ),
+                                );
+                              }
                             },
                             child: Text(
                               "Masuk",

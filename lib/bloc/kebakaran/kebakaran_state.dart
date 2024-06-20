@@ -17,6 +17,8 @@ final class KebakaranLoaded extends KebakaranState {
 final class KebakaranError extends KebakaranState {
   final String message;
   KebakaranError({
-    required this.message,
+    required this.message,z
   });
+
+  get error => null;
 }

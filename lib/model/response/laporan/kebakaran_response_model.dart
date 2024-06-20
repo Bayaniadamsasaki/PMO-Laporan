@@ -12,6 +12,7 @@ class KebakaranResponseModel {
   String? isi;
   DateTime? createdAt;
   DateTime? updatedAt;
+
   KebakaranResponseModel({
     this.id,
     this.foto,
