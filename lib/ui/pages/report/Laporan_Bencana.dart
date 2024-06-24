@@ -1,22 +1,21 @@
 // ignore_for_file: file_names
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:laporan_masyarakat/bloc/kebakaran/kebakaran_bloc.dart';
+import 'package:laporan_masyarakat/bloc/bencana/bencana_bloc.dart';
 import 'package:laporan_masyarakat/config/Asset.dart';
-import 'package:laporan_masyarakat/model/response/laporan/kebakaran_response_model.dart';
+import 'package:laporan_masyarakat/model/response/laporan/bencana_response_model.dart';
 import 'package:laporan_masyarakat/ui/widget/tittle/form_info.dart';
 
-class LaporanKebakaran extends StatefulWidget {
-  const LaporanKebakaran({Key? key}) : super(key: key);
+class LaporanBencana extends StatefulWidget {
+  const LaporanBencana({Key? key}) : super(key: key);
 
   @override
-  State<LaporanKebakaran> createState() => _LaporanKebakaranState();
+  State<LaporanBencana> createState() => _LaporanBencanaState();
 }
 
-class _LaporanKebakaranState extends State<LaporanKebakaran> {
+class _LaporanBencanaState extends State<LaporanBencana> {
   late TextEditingController foto;
   late TextEditingController jenis;
   late TextEditingController nama;
@@ -87,7 +86,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Laporan Kebakaran",
+          "Laporan Bencana Alam",
           style: Asset.poppins.copyWith(
             fontSize: 18.0,
             fontWeight: FontWeight.w600,
@@ -389,9 +388,9 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      BlocConsumer<KebakaranBloc, KebakaranState>(
+                      BlocConsumer<BencanaBloc, BencanaState>(
                         listener: (context, state) {
-                          if (state is KebakaranLoaded) {
+                          if (state is BencanaLoaded) {
                             foto.clear();
                             jenis.clear();
                             nama.clear();
@@ -417,7 +416,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                                 backgroundColor: Asset.colorPrimary,
                               ),
                               onPressed: () {
-                                final requestModel = KebakaranResponseModel(
+                                final requestModel = BencanaResponseModel(
                                   foto: _imageFile!.path,
                                   jenis: jenis.text,
                                   nama: nama.text,
@@ -426,8 +425,8 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                                   tanggal: _selectedDate,
                                   isi: isi.text,
                                 );
-                                context.read<KebakaranBloc>().add(
-                                      SaveKebakaranEvent(request: requestModel),
+                                context.read<BencanaBloc>().add(
+                                      SaveBencanaEvent(request: requestModel),
                                     );
                               },
                               child: Text(

@@ -8,7 +8,7 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final ApiService authDatasource;
+  final AuthDataSources authDatasource;
   LoginBloc(
     this.authDatasource,
   ) : super(LoginInitial()) {

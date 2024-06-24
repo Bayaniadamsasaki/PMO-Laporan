@@ -8,16 +8,23 @@ part 'kebakaran_state.dart';
 
 class KebakaranBloc extends Bloc<KebakaranEvent, KebakaranState> {
   final KebakaranDataSources kebakaranDataSources;
-  KebakaranBloc(
-    this.kebakaranDataSources,
-  ) : super(KebakaranInitial()) {
-    on<SaveKebakaranEvent>((event, emit) async {
+
+  KebakaranBloc(this.kebakaranDataSources) : super(KebakaranInitial()) {
+    on<FetchKebakaranData>((event, emit) async {
       emit(KebakaranLoading());
-      final result = await kebakaranDataSources.createKebakaran(event.request);
-      print(result);
+      final result = await kebakaranDataSources.getKebakaran();
       result.fold(
         (l) => emit(KebakaranError(message: l)),
         (r) => emit(KebakaranLoaded(model: r)),
+      );
+    });
+
+    on<SaveKebakaranEvent>((event, emit) async {
+      emit(KebakaranLoading());
+      final result = await kebakaranDataSources.createKebakaran(event.request);
+      result.fold(
+        (l) => emit(KebakaranError(message: l)),
+        (r) => emit(KebakaranLoaded(model: [r])),
       );
     });
   }

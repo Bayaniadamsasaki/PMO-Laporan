@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class KebakaranResponseModel {
+class MedisResponseModel {
   final int? id;
   final String? foto;
   final String? jenis;
@@ -10,7 +10,7 @@ class KebakaranResponseModel {
   final DateTime? tanggal;
   final String? isi;
 
-  KebakaranResponseModel({
+  MedisResponseModel({
     this.id,
     this.foto,
     this.jenis,
@@ -21,20 +21,21 @@ class KebakaranResponseModel {
     this.isi,
   });
 
-  factory KebakaranResponseModel.fromJson(String str) =>
-      KebakaranResponseModel.fromMap(json.decode(str));
+  factory MedisResponseModel.fromJson(String str) =>
+      MedisResponseModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory KebakaranResponseModel.fromMap(Map<String, dynamic> json) =>
-      KebakaranResponseModel(
+  factory MedisResponseModel.fromMap(Map<String, dynamic> json) =>
+      MedisResponseModel(
         id: json["id"],
         foto: json["foto"],
         jenis: json["jenis"],
         nama: json["nama"],
         telepon: json["telepon"],
         lokasi: json["lokasi"],
-        tanggal: json["tanggal"] == null ? null : DateTime.parse(json["tanggal"]),
+        tanggal:
+            json["tanggal"] == null ? null : DateTime.parse(json["tanggal"]),
         isi: json["isi"],
       );
 

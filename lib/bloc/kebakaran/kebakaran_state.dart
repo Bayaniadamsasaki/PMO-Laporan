@@ -8,7 +8,7 @@ final class KebakaranInitial extends KebakaranState {}
 final class KebakaranLoading extends KebakaranState {}
 
 final class KebakaranLoaded extends KebakaranState {
-  final KebakaranResponseModel model;
+  final List<KebakaranResponseModel> model;
   KebakaranLoaded({
     required this.model,
   });
@@ -17,7 +17,7 @@ final class KebakaranLoaded extends KebakaranState {
 final class KebakaranError extends KebakaranState {
   final String message;
   KebakaranError({
-    required this.message,z
+    required this.message,
   });
 
   get error => null;

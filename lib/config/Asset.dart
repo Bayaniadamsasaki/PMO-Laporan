@@ -7,6 +7,9 @@ class Asset {
   static const colorPrimary = Color(0xFF85D6FF);
   static const colorSecondary = Color(0xFF55BBAF);
   static const colorTertiary = Color(0xFFCDCDCD);
+  static const colorKebakaran = Color(0xFFFC9F24);
+  static const colorMedis = Color(0xFF49327F);
+  static const colorBencana = Color(0xFF22AAA0);
   static const bannerLogin = "assets/masuk.png";
   static const bannerWelcome = 'assets/logo.png';
   static const shape = 'assets/shape.png';
