@@ -1,23 +1,24 @@
-// ignore_for_file: file_names, avoid_print
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:laporan_masyarakat/admin/riwayat/Riwayat_Laporan_admin.dart';
 import 'package:laporan_masyarakat/bloc/kebakaran/kebakaran_bloc.dart';
 import 'package:laporan_masyarakat/config/Asset.dart';
 import 'package:laporan_masyarakat/model/response/laporan/kebakaran_response_model.dart';
-import 'package:laporan_masyarakat/ui/pages/report/Riwayat_Laporan.dart';
 import 'package:laporan_masyarakat/ui/widget/tittle/form_info.dart';
 
-class LaporanKebakaran extends StatefulWidget {
-  const LaporanKebakaran({Key? key}) : super(key: key);
+class EditLaporanKebakaran extends StatefulWidget {
+  final KebakaranResponseModel item;
+
+  const EditLaporanKebakaran({Key? key, required this.item}) : super(key: key);
 
   @override
-  State<LaporanKebakaran> createState() => _LaporanKebakaranState();
+  State<EditLaporanKebakaran> createState() => _EditLaporanKebakaranState();
 }
 
-class _LaporanKebakaranState extends State<LaporanKebakaran> {
+class _EditLaporanKebakaranState extends State<EditLaporanKebakaran> {
   late TextEditingController foto;
   late TextEditingController jenis;
   late TextEditingController nama;
@@ -29,13 +30,17 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
   @override
   void initState() {
     super.initState();
-    foto = TextEditingController();
-    jenis = TextEditingController();
-    nama = TextEditingController();
-    telepon = TextEditingController();
-    lokasi = TextEditingController();
-    tanggal = TextEditingController();
-    isi = TextEditingController();
+    foto = TextEditingController(
+        text: widget.item.foto); // Initialize with existing data
+    jenis = TextEditingController(text: widget.item.jenis);
+    nama = TextEditingController(text: widget.item.nama);
+    telepon = TextEditingController(text: widget.item.telepon);
+    lokasi = TextEditingController(text: widget.item.lokasi);
+    tanggal = TextEditingController(
+        text: widget.item.tanggal != null
+            ? '${widget.item.tanggal!.day}/${widget.item.tanggal!.month}/${widget.item.tanggal!.year}'
+            : ''); // Format the date if it exists
+    isi = TextEditingController(text: widget.item.isi);
   }
 
   @override
@@ -88,7 +93,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Laporan Kebakaran",
+          "Edit Laporan Kebakaran",
           style: Asset.poppins.copyWith(
             fontSize: 18.0,
             fontWeight: FontWeight.w600,
@@ -412,7 +417,7 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const RiwayatLaporan()));
+                                        const RiwayatLaporanAdmin()));
                           }
                         },
                         builder: (context, state) {
@@ -426,20 +431,24 @@ class _LaporanKebakaranState extends State<LaporanKebakaran> {
                               ),
                               onPressed: () {
                                 final requestModel = KebakaranResponseModel(
-                                  foto: _imageFile!.path,
+                                  foto: _imageFile != null
+                                      ? _imageFile!.path
+                                      : widget.item.foto,
                                   jenis: jenis.text,
                                   nama: nama.text,
                                   telepon: telepon.text,
                                   lokasi: lokasi.text,
-                                  tanggal: _selectedDate,
+                                  tanggal: _selectedDate ?? widget.item.tanggal,
                                   isi: isi.text,
+                                  id: widget.item.id,
                                 );
                                 context.read<KebakaranBloc>().add(
-                                      SaveKebakaranEvent(request: requestModel),
+                                      UpdateKebakaranEvent(
+                                          request: requestModel),
                                     );
                               },
                               child: Text(
-                                "Kirim Laporan",
+                                "Simpan Perubahan",
                                 style: Asset.poppins.copyWith(
                                     color: Colors.white,
                                     fontSize: 18.0,

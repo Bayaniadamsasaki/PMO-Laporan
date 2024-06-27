@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:laporan_masyarakat/admin/home/home_page_admin.dart';
 import 'package:laporan_masyarakat/bloc/login/login_bloc.dart';
 import 'package:laporan_masyarakat/core.dart';
 import 'package:laporan_masyarakat/localstorage/auth_local_storage.dart';
@@ -121,24 +122,38 @@ class _SignInState extends State<SignIn> {
                     BlocConsumer<LoginBloc, LoginState>(
                       listener: (context, state) {
                         if (state is LoginLoaded) {
+                          // Clear controllers
                           emailController.clear();
                           passwordController.clear();
+
+                          // Show success snackbar
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               backgroundColor: Colors.blue,
                               content: Text('Success Login'),
                             ),
                           );
-                          // Navigasi ke HomePage
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const HomePage();
-                              },
-                            ),
-                          );
-                        } else if (state is LoginError && state.message.isNotEmpty) {
+
+                          // Navigate based on user role
+                          if (state.loginResponseModel.role == 'admin') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const HomePageAdmin(),
+                              ),
+                            );
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomePage(),
+                              ),
+                            );
+                          }
+                        } else if (state is LoginError &&
+                            state.message.isNotEmpty) {
+                          // Show error snackbar
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: Colors.red,
@@ -165,14 +180,14 @@ class _SignInState extends State<SignIn> {
                                   email: email,
                                   password: password,
                                 );
-                                context
-                                    .read<LoginBloc>()
-                                    .add(DoLoginEvent(loginModel: requestModel));
+                                context.read<LoginBloc>().add(
+                                    DoLoginEvent(loginModel: requestModel));
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     backgroundColor: Colors.red,
-                                    content: Text('Email and password cannot be empty'),
+                                    content: Text(
+                                        'Email and password cannot be empty'),
                                   ),
                                 );
                               }

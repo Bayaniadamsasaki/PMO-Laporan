@@ -1,12 +1,12 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_print
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:laporan_masyarakat/bloc/medis/medis_bloc.dart';
 import 'package:laporan_masyarakat/config/Asset.dart';
 import 'package:laporan_masyarakat/model/response/laporan/medis_response_model.dart';
+import 'package:laporan_masyarakat/ui/pages/report/Riwayat_Laporan.dart';
 import 'package:laporan_masyarakat/ui/widget/tittle/form_info.dart';
 
 class LaporanMedis extends StatefulWidget {
@@ -405,6 +405,12 @@ class _LaporanMedisState extends State<LaporanMedis> {
                                 content: Text("Laporan Sukses"),
                               ),
                             );
+
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RiwayatLaporan()));
                           }
                         },
                         builder: (context, state) {

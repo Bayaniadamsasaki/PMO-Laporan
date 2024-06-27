@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:laporan_masyarakat/admin/riwayat/widget/tittle/tittle_kabakaran_admin.dart';
 import 'package:laporan_masyarakat/config/Asset.dart';
-import 'package:laporan_masyarakat/model/response/laporan/bencana_response_model.dart';
-import 'package:laporan_masyarakat/ui/pages/detail/detail_laporan_bencana.dart';
-import 'package:laporan_masyarakat/ui/widget/tittle/tittle_bencana.dart';
+import 'package:laporan_masyarakat/model/response/laporan/kebakaran_response_model.dart';
+import 'package:laporan_masyarakat/ui/pages/detail/detail_laporan_kebakaran.dart';
 
-class RiwayatLaporanBencana extends StatelessWidget {
-  final List<BencanaResponseModel> data;
+class RiwayatLaporanKebakaranAdmin extends StatelessWidget {
+  final List<KebakaranResponseModel> data;
 
-  const RiwayatLaporanBencana({Key? key, required this.data}) : super(key: key);
+  const RiwayatLaporanKebakaranAdmin({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class RiwayatLaporanBencana extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DetailLaporanBencana(laporan: item),
+                builder: (context) => DetailLaporanKebakaran(laporan: item),
               ),
             );
           },
@@ -30,7 +30,7 @@ class RiwayatLaporanBencana extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (index > 0) const SizedBox(height: 20.0),
-              const TittleBencana(),
+              TittleKebakaranAdmin(item: item), // Pass item to TittleKebakaranAdmin
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -48,33 +48,40 @@ class RiwayatLaporanBencana extends StatelessWidget {
                     ),
                   ],
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       item.nama ?? '',
                       style: Asset.poppins.copyWith(
-                          fontSize: 15.0, fontWeight: FontWeight.w500),
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 10.0),
                     Text(
                       item.telepon ?? '',
                       style: Asset.poppins.copyWith(
-                          fontSize: 15.0, fontWeight: FontWeight.w500),
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 10.0),
                     Text(
                       item.tanggal?.toIso8601String() ?? '',
                       style: Asset.poppins.copyWith(
-                          fontSize: 15.0, fontWeight: FontWeight.w500),
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 10.0),
                     Text(
                       item.lokasi ?? '',
                       style: Asset.poppins.copyWith(
-                          fontSize: 15.0, fontWeight: FontWeight.w500),
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),

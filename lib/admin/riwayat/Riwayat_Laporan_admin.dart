@@ -1,6 +1,9 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:laporan_masyarakat/admin/riwayat/widget/riwayat%20card/riwayat_laporan_bencana_admin.dart';
+import 'package:laporan_masyarakat/admin/riwayat/widget/riwayat%20card/riwayat_laporan_kebakaran_admin.dart';
+import 'package:laporan_masyarakat/admin/riwayat/widget/riwayat%20card/riwayat_laporan_medis_admin.dart';
 import 'package:laporan_masyarakat/bloc/bencana/bencana_bloc.dart';
 import 'package:laporan_masyarakat/bloc/kebakaran/kebakaran_bloc.dart';
 import 'package:laporan_masyarakat/bloc/medis/medis_bloc.dart';
@@ -8,18 +11,15 @@ import 'package:laporan_masyarakat/config/Asset.dart';
 import 'package:laporan_masyarakat/data/laporan%20sources/bencana/bencana_datasources.dart';
 import 'package:laporan_masyarakat/data/laporan%20sources/kebakaran/kebakaran_datasources.dart';
 import 'package:laporan_masyarakat/data/laporan%20sources/medis/medis_datasources.dart';
-import 'package:laporan_masyarakat/ui/widget/riwayat/riwayat_laporan_bencana.dart';
-import 'package:laporan_masyarakat/ui/widget/riwayat/riwayat_laporan_kebakaran.dart';
-import 'package:laporan_masyarakat/ui/widget/riwayat/riwayat_laporan_medis.dart';
 
-class RiwayatLaporan extends StatefulWidget {
-  const RiwayatLaporan({Key? key}) : super(key: key);
+class RiwayatLaporanAdmin extends StatefulWidget {
+  const RiwayatLaporanAdmin({Key? key}) : super(key: key);
 
   @override
-  State<RiwayatLaporan> createState() => _RiwayatLaporanState();
+  State<RiwayatLaporanAdmin> createState() => _RiwayatLaporanAdminState();
 }
 
-class _RiwayatLaporanState extends State<RiwayatLaporan> {
+class _RiwayatLaporanAdminState extends State<RiwayatLaporanAdmin> {
   late KebakaranBloc _kebakaranBloc;
   late MedisBloc _medisBloc;
   late BencanaBloc _bencanaBloc;
@@ -47,10 +47,14 @@ class _RiwayatLaporanState extends State<RiwayatLaporan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Riwayat Laporan",
-          style: Asset.poppins
-              .copyWith(fontSize: 18.0, fontWeight: FontWeight.w600),
+        title: Row(
+          children: [
+            Text(
+              "Admin Riwayat Laporan",
+              style: Asset.poppins
+                  .copyWith(fontSize: 20.0, fontWeight: FontWeight.w600),
+            ),
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -69,7 +73,8 @@ class _RiwayatLaporanState extends State<RiwayatLaporan> {
                   if (kebakaranState is KebakaranLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (kebakaranState is KebakaranLoaded) {
-                    return RiwayatLaporanKebakaran(data: kebakaranState.model);
+                    return RiwayatLaporanKebakaranAdmin(
+                        data: kebakaranState.model);
                   } else if (kebakaranState is KebakaranError) {
                     return Text(kebakaranState.message);
                   }
@@ -82,7 +87,7 @@ class _RiwayatLaporanState extends State<RiwayatLaporan> {
                   if (medisState is MedisLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (medisState is MedisLoaded) {
-                    return RiwayatLaporanMedis(data: medisState.model);
+                    return RiwayatLaporanMedisAdmin(data: medisState.model);
                   } else if (medisState is MedisError) {
                     return Text(medisState.message);
                   }
@@ -95,7 +100,7 @@ class _RiwayatLaporanState extends State<RiwayatLaporan> {
                   if (bencanaState is BencanaLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (bencanaState is BencanaLoaded) {
-                    return RiwayatLaporanBencana(data: bencanaState.model);
+                    return RiwayatLaporanBencanaAdmin(data: bencanaState.model);
                   } else if (bencanaState is BencanaError) {
                     return Text(bencanaState.message);
                   }

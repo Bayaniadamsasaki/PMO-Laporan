@@ -19,5 +19,7 @@ class Asset {
   static const bencanaAlam = 'assets/bencanaalam.png';
   static const riwayat = 'assets/riwayat.png';
   static const outlineInfo = 'assets/icons/outlineinfo.png';
+  static const personUser = 'assets/icons/person.png';
+  static const info = 'assets/icons/Info.png';
 }
 

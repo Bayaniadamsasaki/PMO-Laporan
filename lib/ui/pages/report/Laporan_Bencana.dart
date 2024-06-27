@@ -1,8 +1,10 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_print
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:laporan_masyarakat/admin/riwayat/Riwayat_Laporan_admin.dart';
 import 'package:laporan_masyarakat/bloc/bencana/bencana_bloc.dart';
 import 'package:laporan_masyarakat/config/Asset.dart';
 import 'package:laporan_masyarakat/model/response/laporan/bencana_response_model.dart';
@@ -404,6 +406,12 @@ class _LaporanBencanaState extends State<LaporanBencana> {
                                 content: Text("Laporan Sukses"),
                               ),
                             );
+
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RiwayatLaporanAdmin()));
                           }
                         },
                         builder: (context, state) {

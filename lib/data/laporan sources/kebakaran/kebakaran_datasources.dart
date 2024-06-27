@@ -9,7 +9,7 @@ import 'package:laporan_masyarakat/model/response/laporan/kebakaran_response_mod
 class KebakaranDataSources {
   Future<Either<String, KebakaranResponseModel>> createKebakaran(
       KebakaranResponseModel kebakaranResponseModel) async {
-    final url = Uri.parse("http://192.168.1.9:8000/api/laporankebakaran");
+    final url = Uri.parse("http://10.138.34.112:8000/api/laporankebakaran");
 
     var request = http.MultipartRequest('POST', url);
 
@@ -42,7 +42,7 @@ class KebakaranDataSources {
   Future<Either<String, List<KebakaranResponseModel>>> getKebakaran() async {
     try {
       final response =
-          await http.get(Uri.parse("http://192.168.1.9:8000/api/laporan"));
+          await http.get(Uri.parse("http://10.138.34.112:8000/api/laporan"));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
@@ -52,6 +52,62 @@ class KebakaranDataSources {
         return Right(result);
       } else {
         return const Left("Failed to get kebakaran");
+      }
+    } catch (e) {
+      return Left("Exception: $e");
+    }
+  }
+
+  Future<Either<String, String>> deleteKebakaran(String id) async {
+    try {
+      final url = Uri.parse("http://10.138.34.112:8000/api/deletelaporan/$id");
+
+      // Menambahkan id ke body request
+      final response = await http.post(
+        url,
+        body: {'id': id},
+      );
+
+      if (response.statusCode == 200) {
+        return const Right("Sukses");
+      } else {
+        return const Left("Gagal menghapus kebakaran");
+      }
+    } catch (e) {
+      return Left("Exception: $e");
+    }
+  }
+
+  //update kebakaran
+  Future<Either<String, String>> updateKebakaran(
+      KebakaranResponseModel kebakaranResponseModel) async {
+    try {
+      final url = Uri.parse(
+          "http://10.138.34.112:8000/api/updatelaporan/${kebakaranResponseModel.id}");
+
+      var request = http.MultipartRequest('POST', url);
+
+      request.fields['jenis'] = kebakaranResponseModel.jenis ?? '';
+      request.fields['nama'] = kebakaranResponseModel.nama ?? '';
+      request.fields['telepon'] = kebakaranResponseModel.telepon ?? '';
+      request.fields['lokasi'] = kebakaranResponseModel.lokasi ?? '';
+      request.fields['tanggal'] = kebakaranResponseModel.tanggal != null
+          ? "${kebakaranResponseModel.tanggal!.year.toString().padLeft(4, '0')}-${kebakaranResponseModel.tanggal!.month.toString().padLeft(2, '0')}-${kebakaranResponseModel.tanggal!.day.toString().padLeft(2, '0')}"
+          : '';
+      request.fields['isi'] = kebakaranResponseModel.isi ?? '';
+
+      if (kebakaranResponseModel.foto != null) {
+        var file = File(kebakaranResponseModel.foto!);
+        request.files.add(await http.MultipartFile.fromPath('foto', file.path,
+            contentType: MediaType('image', 'jpg')));
+      }
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        return const Right("Sukses");
+      } else {
+        return const Left("Gagal mengupdate kebakaran");
       }
     } catch (e) {
       return Left("Exception: $e");

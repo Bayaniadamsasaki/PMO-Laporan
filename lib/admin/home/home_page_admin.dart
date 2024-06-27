@@ -1,15 +1,15 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:laporan_masyarakat/admin/riwayat/Riwayat_Laporan_admin.dart';
 import 'package:laporan_masyarakat/config/Asset.dart';
 import 'package:laporan_masyarakat/ui/pages/report/Laporan_Bencana.dart';
 import 'package:laporan_masyarakat/ui/pages/report/Laporan_Kebakaran.dart';
 import 'package:laporan_masyarakat/ui/pages/report/Laporan_Medis.dart';
-import 'package:laporan_masyarakat/ui/pages/report/Riwayat_Laporan.dart';
 import 'package:laporan_masyarakat/ui/profile/profile_page.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePageAdmin extends StatelessWidget {
+  const HomePageAdmin({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +41,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProfilePages()),
+                  MaterialPageRoute(builder: (context) => const ProfilePages()),
                 );
               },
               child: Padding(
@@ -200,7 +199,8 @@ class HomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const RiwayatLaporan()),
+                              builder: (context) =>
+                                  const RiwayatLaporanAdmin()),
                         );
                       },
                       child: SizedBox(
